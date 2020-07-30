@@ -3,28 +3,28 @@
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
 
-class Routes extends FileAppender {
+class ApiRoutes extends FileAppender {
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $name = 'sv:generate:routes';
+    protected $name = 'sv:generate:api:routes';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Append admin routes into a web routes file';
+    protected $description = 'Append api routes to the api.php routes file';
 
     /**
      * Path for view
      *
      * @var string
      */
-    protected $view = 'routes';
+    protected $view = 'api-routes';
 
     /**
      * Routes have also export route
@@ -57,8 +57,8 @@ class Routes extends FileAppender {
             $this->view = 'templates.'.$template.'.routes';
         }
 
-        if ($this->appendIfNotAlreadyAppended(base_path('routes/web.php'), PHP_EOL.PHP_EOL.$this->buildClass())){
-            $this->info('Appending routes finished');
+        if ($this->appendIfNotAlreadyAppended(base_path('routes/api.php'), PHP_EOL.PHP_EOL.$this->buildClass())){
+            $this->info('Appending API routes finished');
         }
     }
 

@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Symfony\Component\Console\Input\InputOption;
 
-class Controller extends ClassGenerator {
+class ApiController extends ClassGenerator {
 
     use FileManipulations;
 
@@ -15,21 +15,21 @@ class Controller extends ClassGenerator {
      *
      * @var string
      */
-    protected $name = 'sv:generate:controller';
+    protected $name = 'sv:generate:api:controller';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Generate a web controller class';
+    protected $description = 'Generate an API controller class';
 
     /**
      * Path for view
      *
      * @var string
      */
-    protected $view = 'controller';
+    protected $view = 'api-controller';
 
     /**
      * Controller has also export method
@@ -44,7 +44,6 @@ class Controller extends ClassGenerator {
      * @return mixed
      */
     protected $withoutBulk = false;
-    protected $modelTitle;
 
     public function handle()
     {
@@ -73,15 +72,6 @@ class Controller extends ClassGenerator {
         if ($this->generateClass($force)){
 
             $this->info('Generating '.$this->classFullName.' finished');
-
-            $icon = "mdi-list";
-            if ($this->strReplaceInFileAnyway(
-                resource_path("views/layouts/partials/sidebar.blade.php"),
-                "{{--DO NOT REMOVE ME!--}}",
-                '@can("'.$this->modelRouteAndViewName.'.index")<li><a href=\'{{route("$adminPrefix.'.str_plural($this->modelRouteAndViewName).'.index")}}\'><i class="mdi mdi-menu"></i> '.$this->modelTitle.'</a></li>@endcan'.PHP_EOL."{{--DO NOT REMOVE ME!--}}"
-            )) {
-                $this->info('Updating sidebar');
-            }
         }
 
     }
@@ -89,25 +79,15 @@ class Controller extends ClassGenerator {
     protected function buildClass() {
 
         //Set belongsTo Relations
-        $this->relations["belongsTo"] = collect(\Schema::getConnection()->getDoctrineSchemaManager()->listTableForeignKeys($this->tableName))->map(function($fk) {
-            /**@var ForeignKeyConstraint $fk*/
-            return [
-                "function_name" => Str::camel(Str::singular($fk->getForeignTableName())),
-                "related_table" => $fk->getForeignTableName(),
-                "related_model" => "\\$this->modelNamespace\\". Str::studly(Str::singular($fk->getForeignTableName())).'::class',
-                "foreign_key" => collect($fk->getColumns())->first(),
-                "owner_key" => collect($fk->getForeignColumns())->first(),
-            ];
-        })->keyBy('related_table');
-        $this->modelTitle = str_replace("_"," ", Str::title($this->tableName));
+        $this->setBelongsToRelations();
         return view('sv::'.$this->view, [
             'controllerBaseName' => $this->classBaseName,
             'controllerNamespace' => $this->classNamespace,
             'modelBaseName' => $this->modelBaseName,
             'modelFullName' => $this->modelFullName,
             'modelPlural' => $this->modelPlural,
-            'modelTitle' => $this->modelTitle,
             'modelVariableName' => $this->modelVariableName,
+            'modelVariableNamePlural' => Str::plural($this->modelVariableName),
             'modelRouteAndViewName' => $this->modelRouteAndViewName,
             'modelViewsDirectory' => $this->modelViewsDirectory,
             'modelDotNotation' => $this->modelDotNotation,
@@ -119,13 +99,6 @@ class Controller extends ClassGenerator {
             'containsPublishedAtColumn' => in_array("published_at", array_column($this->readColumnsFromTable($this->tableName)->toArray(), 'name')),
             // index
             'columnsToQuery' => $this->readColumnsFromTable($this->tableName)->filter(function($column) {
-                if($this->readColumnsFromTable($this->tableName)->contains('name', 'created_by_admin_user_id')){
-                    return !($column['type'] == 'text' || $column['name'] == "password" || $column['name'] == "remember_token" || $column['name'] == "slug" || $column['name'] == "updated_at" || $column['name'] == "deleted_at");
-                } else if($this->readColumnsFromTable($this->tableName)->contains('name', 'updated_by_admin_user_id')) {
-                    return !($column['type'] == 'text' || $column['name'] == "password" || $column['name'] == "remember_token" || $column['name'] == "slug" || $column['name'] == "created_at" ||  $column['name'] == "deleted_at");
-                } else if($this->readColumnsFromTable($this->tableName)->contains('name', 'created_by_admin_user_id') && $this->readColumnsFromTable($this->tableName)->contains('name', 'updated_by_admin_user_id')) {
-                    return !($column['type'] == 'text' || $column['name'] == "password" || $column['name'] == "remember_token" || $column['name'] == "slug" || $column['name'] == "deleted_at");
-                }
                 return !($column['type'] == 'text' || $column['name'] == "password" || $column['name'] == "remember_token" || $column['name'] == "slug" || $column['name'] == "created_at" || $column['name'] == "deleted_at"||Str::contains($column['name'],"_id"));
             })->pluck('name')->toArray(),
             'columnsToSearchIn' => $this->readColumnsFromTable($this->tableName)->filter(function($column) {
@@ -167,6 +140,6 @@ class Controller extends ClassGenerator {
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Http\Controllers\Admin';
+        return $rootNamespace.'\Http\Controllers\Api';
     }
 }
