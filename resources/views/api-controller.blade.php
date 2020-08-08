@@ -44,7 +44,7 @@ class {{ $controllerBaseName }}  extends Controller
     }
 
     public function dt(Request $request) {
-        return DataTables::eloquent({{$modelBaseName}}::latest())->make();
+        return DataTables::of({{$modelBaseName}}::query())->make();
     }
 
     /**
