@@ -34,8 +34,8 @@ class {{ $controllerBaseName }}  extends Controller
      */
     public function index(Index{{ $modelBaseName }} $request)
     {
-        $data = $helper::listing(Penalty::class, $request)->customQuery(function ($builder) use($request) {
-        /**@var Penalty|Builder $builder*/
+        $data = $this->helper::listing({{$modelBaseName}}::class, $request)->customQuery(function ($builder) use($request) {
+        /**@var {{$modelBaseName}}|Builder $builder*/
         // Add custom queries here
         })->process();
         return $this->api->success()->message("List of {{$modelPlural}}")->payload($data)->send();

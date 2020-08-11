@@ -92,10 +92,6 @@ class {{ $modelBaseName }} extends Model
 
     protected $appends = ["api_route"];
 
-    public function getApiRouteAttribute() {
-        return route("api.{{ $routeBaseName }}.index");
-    }
-
 @if ($searchable)
     public function toSearchableArray() {
         return collect($this->only($this->searchable))->merge([
