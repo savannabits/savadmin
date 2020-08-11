@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Helpers;
+namespace Savannabits\Savadmin\Helpers;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;

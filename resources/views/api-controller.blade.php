@@ -11,17 +11,20 @@ use App\Http\Requests\Api\{{ $modelWithNamespaceFromDefault }}\Index{{ $modelBas
 use App\Http\Requests\Api\{{ $modelWithNamespaceFromDefault }}\Store{{ $modelBaseName }};
 use App\Http\Requests\Api\{{ $modelWithNamespaceFromDefault }}\Update{{ $modelBaseName }};
 use {{$modelFullName}};
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Savannabits\Savadmin\Helpers\ApiResponse;
+use Savannabits\Savadmin\Helpers\SavbitsHelper;
 use Yajra\DataTables\Facades\DataTables;
 
 class {{ $controllerBaseName }}  extends Controller
 {
-    private $api;
-    public function __construct(ApiResponse $apiResponse)
+    private $api, $helper;
+    public function __construct(ApiResponse $apiResponse, SavbitsHelper $helper)
     {
         $this->api = $apiResponse;
+        $this->helper = $helper;
     }
 
     /**
@@ -31,15 +34,10 @@ class {{ $controllerBaseName }}  extends Controller
      */
     public function index(Index{{ $modelBaseName }} $request)
     {
-        $query = {{$modelBaseName}}::query();
-        if ($request->has('search')) {
-            $query->whereId($request->search)
-            @foreach($columnsToSearchIn as $col)
-->orWhere("{{$col}}","LIKE","%$request->search%")
-            @endforeach
-;
-        }
-        $data = $query->paginate($request->get('per_page') ?? 15);
+        $data = $helper::listing(Penalty::class, $request)->customQuery(function ($builder) use($request) {
+        /**@var Penalty|Builder $builder*/
+        // Add custom queries here
+        })->process();
         return $this->api->success()->message("List of {{$modelPlural}}")->payload($data)->send();
     }
 

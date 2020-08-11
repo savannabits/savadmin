@@ -19,6 +19,7 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 @if($fillable)@foreach($fillable as $fillableColumn)
 @endforeach
+@if($searchable)use Laravel\Scout\Searchable;
 @endif
 @if($hasSoftDelete)use Illuminate\Database\Eloquent\SoftDeletes;
 @endif
@@ -35,12 +36,23 @@ class {{ $modelBaseName }} extends Model
 @endif
 @if($hasRoles)use HasRoles;
 @endif
+
+@if($searchable)use Searchable;
+@endif
     @if (!is_null($tableName))protected $table = '{{ $tableName }}';
 
     @endif
 @if ($fillable)protected $fillable = [
     @foreach($fillable as $f)
     '{{ $f }}',
+    @endforeach
+
+    ];
+    @endif
+
+@if ($searchable)protected $searchable = [
+    @foreach($searchable as $s)
+        '{{ $s }}',
     @endforeach
 
     ];
@@ -78,6 +90,18 @@ class {{ $modelBaseName }} extends Model
     @endif
 
     protected $appends = ["api_route"];
+
+    public function getApiRouteAttribute() {
+        return route("api.{{ $routeBaseName }}.index");
+    }
+
+@if ($searchable)
+    public function toSearchableArray() {
+        return collect($this->only($this->searchable))->merge([
+            // Add more keys here
+        ])->toArray();
+    }
+    @endif
 
     /* ************************ ACCESSOR ************************* */
 
