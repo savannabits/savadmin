@@ -19,6 +19,7 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 @if($fillable)@foreach($fillable as $fillableColumn)
 @endforeach
+@endif
 @if($searchable)use Laravel\Scout\Searchable;
 @endif
 @if($hasSoftDelete)use Illuminate\Database\Eloquent\SoftDeletes;
