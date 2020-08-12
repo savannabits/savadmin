@@ -29,19 +29,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 @endif
 @if($hasRoles)use Spatie\Permission\Traits\HasRoles;
 @endif
+use Rennokki\QueryCache\Traits\QueryCacheable;
 
 class {{ $modelBaseName }} extends Model
 {
 @if($hasSoftDelete)
     use SoftDeletes;
-@endif
+    @endif
 @if($hasRoles)use HasRoles;
-@endif
-
+    @endif
 @if($searchable)use Searchable;
-@endif
-    @if (!is_null($tableName))protected $table = '{{ $tableName }}';
-
+    @endif
+    use QueryCacheable;
+    public $cacheFor=60*60*24; //cache for 1 day
+    protected static $flushCacheOnUpdate=true; //invalidate the cache when the database is changed
+@if (!is_null($tableName))protected $table = '{{ $tableName }}';
     @endif
 @if ($fillable)protected $fillable = [
     @foreach($fillable as $f)
