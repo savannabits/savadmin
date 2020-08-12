@@ -35,7 +35,7 @@
                                       v-on:delete-{{str_singular($modelRouteAndViewName)}}="showDeleteDialog"
                         ></dt-component>
                     </b-card>
-                    <b-modal size="lg" v-if="form" v-on:ok.prevent="onFormSubmit" no-close-on-backdrop scrollable v-cloak ref="{{$modelVariableName}}FormDialog">
+                    <b-modal size="lg" v-if="form" v-on:ok.prevent="onFormSubmit" no-close-on-backdrop v-cloak ref="{{$modelVariableName}}FormDialog">
                         <template v-slot:modal-title>
                             <h4 v-if="form.id" class="font-weight-bolder">Edit {{$modelTitle}} @@{{ form.id }}</h4>
                             <h4 v-else class="font-weight-bolder">Create New {{$modelTitle}}</h4>
