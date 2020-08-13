@@ -86,7 +86,7 @@ if (isset($object->{{$relation["relationship_variable"]}})) {
             @endif
             @endif{{PHP_EOL}}
             ${{$modelVariableName}}->saveOrFail();
-            return $this->api->success()->message('{{$modelBaseName}} Created')->payload(${{$modelVariableName}})->send();
+            return $this->api->success()->message('{{$modelTitle}} Created')->payload(${{$modelVariableName}})->send();
         } catch (\Throwable $exception) {
             \Log::error($exception);
             return $this->api->failed()->message($exception->getMessage())->payload([])->code(500)->send();
@@ -114,7 +114,7 @@ ${{$modelVariableName}}->load([
         ]);
 @endif
             @endif
-return $this->api->success()->message("{{$modelBaseName}} ${{$modelVariableName}}->id")->payload(${{$modelVariableName}})->send();
+return $this->api->success()->message("{{$modelTitle}} ${{$modelVariableName}}->id")->payload(${{$modelVariableName}})->send();
         } catch (\Throwable $exception) {
             return $this->api->failed()->message($exception->getMessage())->send();
         }
@@ -153,7 +153,7 @@ if (isset($object->{{$relation["relationship_variable"]}})) {
     @endif
             @endif{{PHP_EOL}}
             ${{$modelVariableName}}->saveOrFail();
-            return $this->api->success()->message("{{$modelBaseName}} has been updated")->payload(${{$modelVariableName}})->code(200)->send();
+            return $this->api->success()->message("{{$modelTitle}} has been updated")->payload(${{$modelVariableName}})->code(200)->send();
         } catch (\Throwable $exception) {
             \Log::error($exception);
             return $this->api->failed()->code(400)->message($exception->getMessage())->send();
@@ -170,7 +170,7 @@ if (isset($object->{{$relation["relationship_variable"]}})) {
     public function destroy({{$modelBaseName}} ${{$modelVariableName}})
     {
         ${{$modelVariableName}}->delete();
-        return $this->api->success()->message("{{$modelBaseName}} has been deleted")->payload(${{$modelVariableName}})->code(200)->send();
+        return $this->api->success()->message("{{$modelTitle}} has been deleted")->payload(${{$modelVariableName}})->code(200)->send();
     }
 
 @if($export)
