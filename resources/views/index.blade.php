@@ -10,7 +10,12 @@
             details-dialog-ref="{{$modelVariableName}}DetailsDialog"
             delete-dialog-ref="{{$modelVariableName}}DeleteDialog"
             app-url="@{{config('app.url')}}"
-            @php
+@if(config('savadmin.tenancy.use_tenancy'))
+            tenant="@{{ tenant('id') }}"
+            tenant-header-name="@{{ config('savadmin.tenancy.header_name') }}"
+            tenant-query-param="@{{ config('savadmin.tenancy.query_parameter_name') }}"
+            @endif
+@php
             echo 'api-route="{{route(\'api.'.$modelRouteAndViewName.'.index\')}}"'.PHP_EOL;
             @endphp
             v-cloak inline-template
@@ -25,13 +30,16 @@
                         {{'@'}}can('{{$modelRouteAndViewName}}.index')
                         <dt-component table-id="{{$modelRouteAndViewName}}-dt"
                                       @php
-                                      echo 'ajax-url="{{route(\'api.'.$modelRouteAndViewName.'.dt\')}}"'
+                                      echo 'ajax-url="{{route(\'api.'.$modelRouteAndViewName.'.dt\')}}"'.PHP_EOL
                                       @endphp
                                       v-cloak
-                                      @php
-                                      echo ':columns="{{json_encode($columns)}}"'.PHP_EOL;
-                                      @endphp
+                                      :columns="@{{json_encode($columns)}}"
                                       table-classes="table table-hover"
+@if(config('savadmin.tenancy.use_tenancy'))
+                                      tenant="@{{ tenant('id') }}"
+                                      tenant-header-name="@{{ config('savadmin.tenancy.header_name') }}"
+                                      tenant-query-param="@{{ config('savadmin.tenancy.query_parameter_name') }}"
+@endif
                                       v-on:edit-{{str_singular($modelRouteAndViewName)}}="showFormDialog"
                                       v-on:show-{{str_singular($modelRouteAndViewName)}}="showDetailsDialog"
                                       v-on:delete-{{str_singular($modelRouteAndViewName)}}="showDeleteDialog"

@@ -75,11 +75,18 @@ class Controller extends ClassGenerator {
             $this->info('Generating '.$this->classFullName.' finished');
 
             $icon = "fa fa-sticky-note-o";
+            if (config('savadmin.tenancy.use_tenancy')) {
+                $ifExistsReg = '|{{route\("\$adminPrefix.'.str_plural($this->modelRouteAndViewName).'.index",\["tenant" =>tenant\("id"\)\]\)}}|';
+                $route = '{{route("$adminPrefix.'.str_plural($this->modelRouteAndViewName).'.index",["tenant" =>tenant("id")])}}';
+            } else {
+                $ifExistsReg = '|{{route\("\$adminPrefix.'.str_plural($this->modelRouteAndViewName).'.index"\)}}|';
+                $route = '{{route("$adminPrefix.'.str_plural($this->modelRouteAndViewName).'.index")}}';
+            }
             if ($this->strReplaceInFile(
                 resource_path("views/layouts/backend/sidebar.blade.php"),
-                '|{{route\("\$adminPrefix.'.str_plural($this->modelRouteAndViewName).'.index"\)}}|',
+                $ifExistsReg,
                 "{{--DO NOT REMOVE ME!--}}",
-                '@can("'.$this->modelRouteAndViewName.'.index")<li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href=\'{{route("$adminPrefix.'.str_plural($this->modelRouteAndViewName).'.index")}}\'><i class="c-sidebar-nav-icon fa fa-sticky-note-o"></i> '.$this->modelTitle.'</a></li>@endcan'.PHP_EOL."{{--DO NOT REMOVE ME!--}}"
+                '@can("'.$this->modelRouteAndViewName.'")<li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href='.$route.'><i class="c-sidebar-nav-icon fa fa-sticky-note-o"></i> '.$this->modelTitle.'</a></li>@endcan'.PHP_EOL."{{--DO NOT REMOVE ME!--}}"
             )) {
                 $this->info('Updating sidebar');
             }
