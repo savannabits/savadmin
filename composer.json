@@ -22,8 +22,8 @@
     "require": {
         "php": "^7.2",
         "ext-json": "*",
-        "illuminate/support": "^7.18.0",
-        "laravel/sanctum": "^2.4",
+        "illuminate/support": "^7.18.0|^8.0",
+        "laravel/sanctum": "^2.6",
         "laravel/helpers": "^1.2",
         "laravel/scout": "^8.2",
         "spatie/laravel-permission": "^3.13.0",
