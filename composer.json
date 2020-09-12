@@ -20,20 +20,19 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.2|^7.3",
         "ext-json": "*",
         "illuminate/support": "^7.18.0|^8.0",
         "laravel/sanctum": "^2.6",
         "laravel/helpers": "^1.2",
-        "laravel/scout": "^8.2",
+        "laravel/scout": "^8.0",
         "spatie/laravel-permission": "^3.13.0",
-        "rennokki/laravel-eloquent-query-cache": "^2.2",
-        "teamtnt/laravel-scout-tntsearch-driver": "^9.0",
-        "yajra/laravel-datatables-buttons": "^4.9.2",
-        "yajra/laravel-datatables-oracle": "^9.10.2"
+        "rennokki/laravel-eloquent-query-cache": "^2.4",
+        "teamtnt/laravel-scout-tntsearch-driver": "^9.0|^10.0",
+        "yajra/laravel-datatables-oracle": "^9.11"
     },
     "require-dev": {
-        "orchestra/testbench": "^5.3.0",
+        "orchestra/testbench": "^5.3.0|^6.0",
         "phpunit/phpunit": "^9.2.5"
     },
     "autoload": {
