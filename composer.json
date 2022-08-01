@@ -27,7 +27,7 @@
         "laravel/helpers": "^1.4",
         "laravel/scout": "^8.0|^9.2",
         "spatie/laravel-permission": "^3|^4|^5",
-        "rennokki/laravel-eloquent-query-cache": "^2.6",
+        "rennokki/laravel-eloquent-query-cache": "^2.6|^3.0",
         "teamtnt/laravel-scout-tntsearch-driver": "^9.0|^10.0|^11",
         "yajra/laravel-datatables-oracle": "^9.11"
     },
