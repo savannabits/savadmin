@@ -22,11 +22,11 @@
     "require": {
         "php": "^7.3|^7.4|^8.0",
         "ext-json": "*",
-        "illuminate/support": "^7.18.0|^8.0",
+        "illuminate/support": "^7.18.0|^8.0|^9.0",
         "laravel/sanctum": "^2.8",
         "laravel/helpers": "^1.4",
         "laravel/scout": "^8.0|^9.2",
-        "spatie/laravel-permission": "^3|^4",
+        "spatie/laravel-permission": "^3|^4|^5",
         "rennokki/laravel-eloquent-query-cache": "^2.6",
         "teamtnt/laravel-scout-tntsearch-driver": "^9.0|^10.0|^11",
         "yajra/laravel-datatables-oracle": "^9.11"
